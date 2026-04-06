@@ -2,7 +2,7 @@ import { useCart } from "@/context/CartContext";
 import { Link } from "react-router-dom";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Footer from "@/components/Footer";
+
 
 const CartPage = () => {
   const { items, updateQuantity, removeFromCart, totalPrice } = useCart();
@@ -17,7 +17,7 @@ const CartPage = () => {
             <Button className="rounded-full px-8">Continue Shopping</Button>
           </Link>
         </div>
-        <Footer />
+        
       </div>
     );
   }
@@ -67,7 +67,6 @@ const CartPage = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

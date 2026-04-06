@@ -1,7 +1,7 @@
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
 import CategoryBanner from "@/components/CategoryBanner";
-import Footer from "@/components/Footer";
+
 import { products } from "@/data/products";
 
 const Index = () => (
@@ -18,7 +18,6 @@ const Index = () => (
     </section>
 
     <CategoryBanner />
-    <Footer />
   </div>
 );
 

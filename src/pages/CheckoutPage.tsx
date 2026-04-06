@@ -3,7 +3,7 @@ import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Footer from "@/components/Footer";
+
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { CreditCard, Banknote } from "lucide-react";
@@ -27,7 +27,7 @@ const CheckoutPage = () => {
           <h1 className="text-3xl font-bold mb-4">No items to checkout</h1>
           <Button onClick={() => navigate("/")} className="rounded-full px-8 mt-4">Continue Shopping</Button>
         </div>
-        <Footer />
+        
       </div>
     );
   }
@@ -119,7 +119,6 @@ const CheckoutPage = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };
