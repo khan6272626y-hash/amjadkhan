@@ -4,7 +4,6 @@ import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useFlyToCart } from "@/context/FlyToCartContext";
 import { products } from "@/data/products";
-import strideLogo from "@/assets/stride-logo.png";
 import { useState, useRef, useEffect } from "react";
 
 const Navbar = () => {
@@ -56,8 +55,8 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
-        <Link to="/" className="flex items-center">
-          <img src={strideLogo} alt="STRIDE" className="h-8 w-auto invert dark:invert-0" />
+        <Link to="/" className="font-heading text-xl font-bold tracking-tight">
+          STRIDE
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
