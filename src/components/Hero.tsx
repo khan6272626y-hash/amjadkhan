@@ -22,7 +22,7 @@ const Hero = () => (
     <div className="relative z-10 container mx-auto px-4">
       <div className="max-w-2xl animate-slide-up">
         <p className="text-primary-foreground/70 text-sm font-medium tracking-widest uppercase mb-4">New Collection 2026</p>
-        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-primary-foreground leading-tight mb-6">
+        <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 bg-gradient-to-r from-white via-white/80 to-white/50 bg-clip-text text-transparent">
           Premium Jogger Shoes Collection
         </h1>
         <p className="text-primary-foreground/70 text-lg mb-8 max-w-md">
