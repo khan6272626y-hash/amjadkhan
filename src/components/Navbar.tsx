@@ -56,8 +56,8 @@ const Navbar = () => {
   return (
     <nav className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
-        <Link to="/" className="font-heading text-xl font-bold tracking-tight">
-          STRIDE
+        <Link to="/" className="flex items-center">
+          <img src={strideLogo} alt="STRIDE" className="h-8 w-auto invert dark:invert-0" />
         </Link>
 
         <div className="hidden md:flex items-center gap-8">
