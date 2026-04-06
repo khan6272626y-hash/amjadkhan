@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { ShoppingBag, Menu, X } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useFlyToCart } from "@/context/FlyToCartContext";
 import { useState } from "react";
 
 const Navbar = () => {
   const { totalItems } = useCart();
+  const { cartIconRef } = useFlyToCart();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const categories = [
@@ -32,7 +34,9 @@ const Navbar = () => {
 
         <div className="flex items-center gap-4">
           <Link to="/cart" className="relative">
-            <ShoppingBag size={22} />
+            <div ref={cartIconRef} className="transition-transform">
+              <ShoppingBag size={22} />
+            </div>
             {totalItems > 0 && (
               <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs w-5 h-5 rounded-full flex items-center justify-center font-semibold">
                 {totalItems}
