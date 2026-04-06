@@ -1,10 +1,11 @@
 import { Instagram, Twitter, Facebook, Mail, Phone, MapPin } from "lucide-react";
+import strideLogo from "@/assets/stride-logo.png";
 
 const Footer = () => (
   <footer className="bg-primary text-primary-foreground">
     <div className="container mx-auto px-4 py-16 grid md:grid-cols-4 gap-10">
       <div>
-        <h3 className="font-heading text-xl font-bold mb-4">STRIDE</h3>
+        <img src={strideLogo} alt="STRIDE" className="h-8 w-auto mb-4 brightness-0 invert" />
         <p className="text-primary-foreground/60 text-sm leading-relaxed">
           Premium jogger shoes crafted for comfort, performance, and style.
         </p>
