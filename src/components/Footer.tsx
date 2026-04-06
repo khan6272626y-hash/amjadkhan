@@ -15,7 +15,8 @@ const Footer = () => (
           <li>Men Shoes</li>
           <li>Women Shoes</li>
           <li>Sports Shoes</li>
-          <li>New Arrivals</li>
+          <li>Kids Shoes</li>
+          <li>Casual Shoes</li>
         </ul>
       </div>
       <div>

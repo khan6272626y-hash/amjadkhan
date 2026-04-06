@@ -15,6 +15,8 @@ const Navbar = () => {
     { label: "Men", to: "/category/men" },
     { label: "Women", to: "/category/women" },
     { label: "Sports", to: "/category/sports" },
+    { label: "Kids", to: "/category/kids" },
+    { label: "Casual", to: "/category/casual" },
     { label: "New Arrivals", to: "/category/new" },
     { label: "Best Sellers", to: "/category/best" },
   ];

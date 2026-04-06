@@ -7,6 +7,8 @@ const titles: Record<string, string> = {
   men: "Men Shoes",
   women: "Women Shoes",
   sports: "Sports Shoes",
+  kids: "Kids Shoes",
+  casual: "Casual Shoes",
   new: "New Arrivals",
   best: "Best Sellers",
 };
