@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { ShoppingBag, Heart, Menu, X } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 import { useFlyToCart } from "@/context/FlyToCartContext";
 import { useState } from "react";
 
 const Navbar = () => {
   const { totalItems } = useCart();
+  const { totalWishlist } = useWishlist();
   const { cartIconRef } = useFlyToCart();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -33,6 +35,14 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-4">
+          <Link to="/wishlist" className="relative">
+            <Heart size={22} />
+            {totalWishlist > 0 && (
+              <span className="absolute -top-2 -right-2 bg-destructive text-destructive-foreground text-xs w-5 h-5 rounded-full flex items-center justify-center font-semibold">
+                {totalWishlist}
+              </span>
+            )}
+          </Link>
           <Link to="/cart" className="relative">
             <div ref={cartIconRef} className="transition-transform">
               <ShoppingBag size={22} />
