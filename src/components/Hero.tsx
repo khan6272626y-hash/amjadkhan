@@ -11,6 +11,14 @@ const Hero = () => (
       height={1080}
       className="absolute inset-0 w-full h-full object-cover opacity-60"
     />
+    {/* Smoke animation overlay */}
+    <div className="absolute inset-0 pointer-events-none overflow-hidden">
+      <div className="smoke-particle smoke-1" />
+      <div className="smoke-particle smoke-2" />
+      <div className="smoke-particle smoke-3" />
+      <div className="smoke-particle smoke-4" />
+      <div className="smoke-particle smoke-5" />
+    </div>
     <div className="relative z-10 container mx-auto px-4">
       <div className="max-w-2xl animate-slide-up">
         <p className="text-primary-foreground/70 text-sm font-medium tracking-widest uppercase mb-4">New Collection 2026</p>
