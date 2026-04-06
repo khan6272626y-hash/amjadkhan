@@ -5,6 +5,7 @@ import { useFlyToCart } from "@/context/FlyToCartContext";
 import type { Product } from "@/data/products";
 import { toast } from "sonner";
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({ product }: { product: Product }) => {
   const { addToCart } = useCart();
@@ -12,6 +13,7 @@ const ProductCard = ({ product }: { product: Product }) => {
   const { triggerFly } = useFlyToCart();
   const imgRef = useRef<HTMLImageElement>(null);
   const wishlisted = isWishlisted(product.id);
+  const navigate = useNavigate();
 
   const handleAdd = () => {
     if (imgRef.current) {
@@ -29,7 +31,7 @@ const ProductCard = ({ product }: { product: Product }) => {
   };
 
   return (
-    <div className="group animate-fade-in">
+    <div className="group animate-fade-in cursor-pointer" onClick={() => navigate(`/product/${product.id}`)}>
       <div className="relative overflow-hidden rounded-lg bg-card mb-3 aspect-square">
         <img
           ref={imgRef}

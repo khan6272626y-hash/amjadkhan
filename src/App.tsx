@@ -12,6 +12,7 @@ import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import CategoryPage from "./pages/CategoryPage";
 import WishlistPage from "./pages/WishlistPage";
+import ProductPage from "./pages/ProductPage";
 import NotFound from "./pages/NotFound";
 import Footer from "@/components/Footer";
 
@@ -35,6 +36,7 @@ const App = () => (
                 <Route path="/wishlist" element={<WishlistPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/category/:slug" element={<CategoryPage />} />
+                <Route path="/product/:id" element={<ProductPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </main>
