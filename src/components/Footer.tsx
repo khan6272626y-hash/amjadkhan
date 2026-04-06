@@ -1,7 +1,7 @@
 import { Instagram, Twitter, Facebook, Mail, Phone, MapPin } from "lucide-react";
 
 const Footer = () => (
-  <footer className="bg-primary text-primary-foreground mt-20">
+  <footer className="bg-primary text-primary-foreground">
     <div className="container mx-auto px-4 py-16 grid md:grid-cols-4 gap-10">
       <div>
         <h3 className="font-heading text-xl font-bold mb-4">STRIDE</h3>
