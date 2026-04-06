@@ -17,7 +17,7 @@ const CartPage = () => {
             <Button className="rounded-full px-8">Continue Shopping</Button>
           </Link>
         </div>
-        <Footer />
+        
       </div>
     );
   }
