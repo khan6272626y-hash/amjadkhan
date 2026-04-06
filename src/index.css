@@ -98,3 +98,37 @@
     background: var(--hero-gradient);
   }
 }
+
+@keyframes fly-to-cart {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+    left: var(--start-x);
+    top: var(--start-y);
+  }
+  70% {
+    opacity: 0.8;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.15);
+    left: var(--end-x);
+    top: var(--end-y);
+  }
+}
+
+.fly-to-cart-image {
+  position: fixed;
+  z-index: 9999;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  pointer-events: none;
+  left: var(--start-x);
+  top: var(--start-y);
+  transform: translate(-50%, -50%);
+  animation: fly-to-cart 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  box-shadow: 0 8px 32px hsl(0 0% 0% / 0.3);
+}

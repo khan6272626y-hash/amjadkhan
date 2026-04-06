@@ -1,12 +1,20 @@
 import { ShoppingBag } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useFlyToCart } from "@/context/FlyToCartContext";
 import type { Product } from "@/data/products";
 import { toast } from "sonner";
+import { useRef } from "react";
 
 const ProductCard = ({ product }: { product: Product }) => {
   const { addToCart } = useCart();
+  const { triggerFly } = useFlyToCart();
+  const imgRef = useRef<HTMLImageElement>(null);
 
   const handleAdd = () => {
+    if (imgRef.current) {
+      const rect = imgRef.current.getBoundingClientRect();
+      triggerFly(product.image, rect);
+    }
     addToCart({ id: product.id, name: product.name, price: product.price, image: product.image });
     toast.success(`${product.name} added to cart`);
   };
@@ -15,6 +23,7 @@ const ProductCard = ({ product }: { product: Product }) => {
     <div className="group animate-fade-in">
       <div className="relative overflow-hidden rounded-lg bg-card mb-3 aspect-square">
         <img
+          ref={imgRef}
           src={product.image}
           alt={product.name}
           loading="lazy"
