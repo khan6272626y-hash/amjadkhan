@@ -4,6 +4,7 @@ import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useFlyToCart } from "@/context/FlyToCartContext";
 import { products } from "@/data/products";
+import strideLogo from "@/assets/stride-logo.png";
 import { useState, useRef, useEffect } from "react";
 
 const Navbar = () => {
