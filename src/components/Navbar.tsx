@@ -40,10 +40,10 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  // Scroll detection
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", handler, { passive: true });
+    handler();
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
@@ -70,20 +70,26 @@ const Navbar = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
+  // On homepage before scroll: transparent bg with white text
+  // On homepage after scroll OR other pages: solid bg with proper contrast
+  const isTransparent = isHome && !scrolled;
+
+  const textColor = isTransparent ? "text-white" : "text-foreground";
+  const subtleText = isTransparent ? "text-white/70" : "text-muted-foreground";
+  const hoverBg = isTransparent ? "hover:bg-white/10" : "hover:bg-accent";
+
   return (
     <nav
-      className={`sticky top-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "bg-background/95 backdrop-blur-xl shadow-lg border-b border-border"
-          : isHome
-            ? "bg-transparent border-b border-transparent"
-            : "bg-background/80 backdrop-blur-md border-b border-border"
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        isTransparent
+          ? "bg-transparent"
+          : "bg-background/95 backdrop-blur-xl shadow-lg border-b border-border"
       }`}
     >
       <div className="container mx-auto flex items-center justify-between h-16 px-4">
-        <Link to="/" className="font-heading text-xl font-bold tracking-tight relative group">
-          <span className={scrolled || !isHome ? "text-foreground" : "text-white"}>STRIDE</span>
-          <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-foreground group-hover:w-full transition-all duration-300" />
+        <Link to="/" className={`font-heading text-xl font-bold tracking-tight relative group ${textColor}`}>
+          STRIDE
+          <span className={`absolute -bottom-1 left-0 w-0 h-0.5 group-hover:w-full transition-all duration-300 ${isTransparent ? "bg-white" : "bg-foreground"}`} />
         </Link>
 
         <div className="hidden md:flex items-center gap-1">
@@ -93,10 +99,10 @@ const Navbar = () => {
               to={c.to}
               className={`text-xs font-medium px-3 py-1.5 rounded-full transition-all duration-300 ${
                 isActive(c.to)
-                  ? "bg-foreground text-background"
-                  : scrolled || !isHome
-                    ? "text-muted-foreground hover:text-foreground hover:bg-accent"
-                    : "text-white/70 hover:text-white hover:bg-white/10"
+                  ? isTransparent
+                    ? "bg-white text-black"
+                    : "bg-foreground text-background"
+                  : `${subtleText} hover:${isTransparent ? "text-white" : "text-foreground"} ${hoverBg}`
               }`}
             >
               {c.label}
@@ -105,30 +111,24 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Dark mode toggle */}
           <button
             onClick={toggleDark}
-            className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${
-              scrolled || !isHome ? "text-foreground hover:bg-accent" : "text-white/80 hover:bg-white/10"
-            }`}
+            className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${textColor} ${hoverBg}`}
             aria-label="Toggle theme"
           >
             {dark ? <Sun size={18} /> : <Moon size={18} />}
           </button>
 
-          {/* Search */}
           <div ref={searchRef} className="relative">
             <button
               onClick={() => setSearchOpen(!searchOpen)}
               aria-label="Search"
-              className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${
-                scrolled || !isHome ? "text-foreground hover:bg-accent" : "text-white/80 hover:bg-white/10"
-              }`}
+              className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${textColor} ${hoverBg}`}
             >
               <Search size={18} />
             </button>
             {searchOpen && (
-              <div className="absolute right-0 top-12 w-80 bg-background border border-border rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
+              <div className="absolute right-0 top-12 w-80 bg-background border border-border rounded-2xl shadow-2xl overflow-hidden animate-fade-in text-foreground">
                 <div className="flex items-center gap-2 px-4 border-b border-border">
                   <Search size={14} className="text-muted-foreground shrink-0" />
                   <input
@@ -171,36 +171,32 @@ const Navbar = () => {
 
           <Link
             to="/wishlist"
-            className={`relative p-2 rounded-full transition-all duration-300 hover:scale-110 ${
-              scrolled || !isHome ? "text-foreground hover:bg-accent" : "text-white/80 hover:bg-white/10"
-            }`}
+            className={`relative p-2 rounded-full transition-all duration-300 hover:scale-110 ${textColor} ${hoverBg}`}
           >
             <Heart size={18} />
             {totalWishlist > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 bg-destructive text-destructive-foreground text-[10px] w-4.5 h-4.5 rounded-full flex items-center justify-center font-bold min-w-[18px] h-[18px]">
+              <span className="absolute -top-0.5 -right-0.5 bg-destructive text-destructive-foreground text-[10px] min-w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold">
                 {totalWishlist}
               </span>
             )}
           </Link>
           <Link
             to="/cart"
-            className={`relative p-2 rounded-full transition-all duration-300 hover:scale-110 ${
-              scrolled || !isHome ? "text-foreground hover:bg-accent" : "text-white/80 hover:bg-white/10"
-            }`}
+            className={`relative p-2 rounded-full transition-all duration-300 hover:scale-110 ${textColor} ${hoverBg}`}
           >
             <div ref={cartIconRef} className="transition-transform">
               <ShoppingBag size={18} />
             </div>
             {totalItems > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 bg-foreground text-background text-[10px] min-w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold">
+              <span className={`absolute -top-0.5 -right-0.5 text-[10px] min-w-[18px] h-[18px] rounded-full flex items-center justify-center font-bold ${
+                isTransparent ? "bg-white text-black" : "bg-foreground text-background"
+              }`}>
                 {totalItems}
               </span>
             )}
           </Link>
           <button
-            className={`md:hidden p-2 rounded-full transition-all duration-300 ${
-              scrolled || !isHome ? "text-foreground" : "text-white"
-            }`}
+            className={`md:hidden p-2 rounded-full transition-all duration-300 ${textColor}`}
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -208,13 +204,12 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu with slide animation */}
       <div
         className={`md:hidden overflow-hidden transition-all duration-300 ${
           mobileOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="bg-background border-t border-border px-4 pb-4 pt-2">
+        <div className="bg-background border-t border-border px-4 pb-4 pt-2 text-foreground">
           {categories.map((c) => (
             <Link
               key={c.to}
