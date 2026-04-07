@@ -45,7 +45,7 @@ const Hero = () => {
   };
 
   return (
-    <section ref={sectionRef} className="relative h-[100vh] min-h-[600px] overflow-hidden hero-gradient flex items-center">
+    <section ref={sectionRef} className="relative h-[100vh] min-h-[600px] overflow-hidden hero-gradient flex items-center -mt-16">
       {/* Parallax background */}
       <img
         src={heroImg}
