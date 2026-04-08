@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { Heart, Trash2 } from "lucide-react";
+import { Heart, Trash2, Loader2 } from "lucide-react";
 import { useWishlist } from "@/context/WishlistContext";
 import { useCart } from "@/context/CartContext";
 import { useFlyToCart } from "@/context/FlyToCartContext";
-import { products } from "@/data/products";
+import { useProducts, type Product } from "@/hooks/useProducts";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useRef } from "react";
@@ -12,11 +12,12 @@ const WishlistPage = () => {
   const { wishlist, toggleWishlist } = useWishlist();
   const { addToCart } = useCart();
   const { triggerFly } = useFlyToCart();
+  const { data: products = [], isLoading } = useProducts();
   const imgRefs = useRef<Record<number, HTMLImageElement | null>>({});
 
   const wishlistProducts = products.filter((p) => wishlist.includes(p.id));
 
-  const handleAddToCart = (product: (typeof products)[0]) => {
+  const handleAddToCart = (product: Product) => {
     const img = imgRefs.current[product.id];
     if (img) {
       triggerFly(product.image, img.getBoundingClientRect());
@@ -24,6 +25,14 @@ const WishlistPage = () => {
     addToCart({ id: product.id, name: product.name, price: product.price, image: product.image });
     toast.success(`${product.name} added to cart`);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center py-32">
+        <Loader2 className="animate-spin text-muted-foreground" size={32} />
+      </div>
+    );
+  }
 
   if (wishlistProducts.length === 0) {
     return (

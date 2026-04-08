@@ -1,18 +1,23 @@
 import { useParams, Link } from "react-router-dom";
 import { useState, useRef } from "react";
-import { ShoppingBag, Heart, Star, ChevronLeft, Minus, Plus, Truck, RotateCcw, Shield } from "lucide-react";
+import { ShoppingBag, Heart, Star, Minus, Plus, Truck, RotateCcw, Shield, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useFlyToCart } from "@/context/FlyToCartContext";
-import { getProductDetail } from "@/data/productDetails";
-import { products } from "@/data/products";
+import { useProduct, useRelatedProducts } from "@/hooks/useProducts";
+import { getImageUrl } from "@/lib/imageMap";
 import ProductCard from "@/components/ProductCard";
 import { toast } from "sonner";
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
-  const product = getProductDetail(Number(id));
+  const productId = Number(id);
+  const { data: product, isLoading } = useProduct(productId || undefined);
+  const { data: related = [] } = useRelatedProducts(
+    product?.category || "",
+    productId
+  );
   const { addToCart } = useCart();
   const { toggleWishlist, isWishlisted } = useWishlist();
   const { triggerFly } = useFlyToCart();
@@ -22,6 +27,14 @@ const ProductPage = () => {
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [activeImage, setActiveImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center py-32">
+        <Loader2 className="animate-spin text-muted-foreground" size={32} />
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -33,6 +46,10 @@ const ProductPage = () => {
   }
 
   const wishlisted = isWishlisted(product.id);
+
+  // Build images array: main image + related product images as alternates
+  const altImages = related.slice(0, 3).map((p) => p.image);
+  const images = [product.image, ...altImages];
 
   const handleAddToCart = () => {
     if (!selectedSize) {
@@ -48,8 +65,6 @@ const ProductPage = () => {
     }
     toast.success(`${product.name} added to cart`);
   };
-
-  const related = products.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4);
 
   return (
     <div className="animate-fade-in">
@@ -72,7 +87,7 @@ const ProductPage = () => {
             <div className="relative aspect-square rounded-2xl overflow-hidden bg-card">
               <img
                 ref={imgRef}
-                src={product.images[activeImage]}
+                src={images[activeImage]}
                 alt={product.name}
                 className="w-full h-full object-cover transition-all duration-500"
               />
@@ -83,7 +98,7 @@ const ProductPage = () => {
               )}
             </div>
             <div className="grid grid-cols-4 gap-3">
-              {product.images.map((img, i) => (
+              {images.map((img, i) => (
                 <button
                   key={i}
                   onClick={() => setActiveImage(i)}
@@ -102,68 +117,76 @@ const ProductPage = () => {
             <div>
               <p className="text-sm text-muted-foreground uppercase tracking-wider mb-1 capitalize">{product.category}</p>
               <h1 className="text-3xl lg:text-4xl font-heading font-bold">{product.name}</h1>
-              <div className="flex items-center gap-3 mt-3">
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      size={16}
-                      className={i < Math.floor(product.rating) ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground/30"}
-                    />
-                  ))}
+              {product.rating && (
+                <div className="flex items-center gap-3 mt-3">
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        size={16}
+                        className={i < Math.floor(product.rating!) ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground/30"}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-sm text-muted-foreground">
+                    {product.rating.toFixed(1)} ({product.reviews} reviews)
+                  </span>
                 </div>
-                <span className="text-sm text-muted-foreground">
-                  {product.rating.toFixed(1)} ({product.reviews} reviews)
-                </span>
-              </div>
+              )}
             </div>
 
             <p className="text-3xl font-bold">${product.price.toFixed(2)}</p>
 
-            <p className="text-muted-foreground leading-relaxed">{product.description}</p>
+            {product.description && (
+              <p className="text-muted-foreground leading-relaxed">{product.description}</p>
+            )}
 
             {/* Color Selection */}
-            <div>
-              <h3 className="font-semibold mb-3">Color{selectedColor && `: ${selectedColor}`}</h3>
-              <div className="flex gap-3">
-                {product.colors.map((color) => (
-                  <button
-                    key={color}
-                    onClick={() => setSelectedColor(color)}
-                    className={`px-4 py-2 rounded-full border text-sm font-medium transition-all duration-200 ${
-                      selectedColor === color
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border hover:border-foreground"
-                    }`}
-                  >
-                    {color}
-                  </button>
-                ))}
+            {product.colors && product.colors.length > 0 && (
+              <div>
+                <h3 className="font-semibold mb-3">Color{selectedColor && `: ${selectedColor}`}</h3>
+                <div className="flex gap-3">
+                  {product.colors.map((color) => (
+                    <button
+                      key={color}
+                      onClick={() => setSelectedColor(color)}
+                      className={`px-4 py-2 rounded-full border text-sm font-medium transition-all duration-200 ${
+                        selectedColor === color
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border hover:border-foreground"
+                      }`}
+                    >
+                      {color}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Size Selection */}
-            <div>
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="font-semibold">Size (US)</h3>
-                <button className="text-sm text-primary hover:underline">Size Guide</button>
+            {product.sizes && product.sizes.length > 0 && (
+              <div>
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="font-semibold">Size (US)</h3>
+                  <button className="text-sm text-primary hover:underline">Size Guide</button>
+                </div>
+                <div className="grid grid-cols-6 gap-2">
+                  {product.sizes.map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => setSelectedSize(size)}
+                      className={`py-3 rounded-lg border text-sm font-medium transition-all duration-200 ${
+                        selectedSize === size
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border hover:border-foreground"
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="grid grid-cols-6 gap-2">
-                {product.sizes.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => setSelectedSize(size)}
-                    className={`py-3 rounded-lg border text-sm font-medium transition-all duration-200 ${
-                      selectedSize === size
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border hover:border-foreground"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
+            )}
 
             {/* Quantity */}
             <div>
@@ -215,17 +238,19 @@ const ProductPage = () => {
             </div>
 
             {/* Features */}
-            <div className="pt-4 border-t border-border">
-              <h3 className="font-semibold mb-3">Features</h3>
-              <ul className="space-y-2">
-                {product.features.map((f, i) => (
-                  <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            {product.features && product.features.length > 0 && (
+              <div className="pt-4 border-t border-border">
+                <h3 className="font-semibold mb-3">Features</h3>
+                <ul className="space-y-2">
+                  {product.features.map((f, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                      {f}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
       </section>

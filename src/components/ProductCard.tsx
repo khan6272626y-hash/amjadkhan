@@ -2,7 +2,7 @@ import { ShoppingBag, Heart, Eye } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useFlyToCart } from "@/context/FlyToCartContext";
-import type { Product } from "@/data/products";
+import type { Product } from "@/hooks/useProducts";
 import { toast } from "sonner";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";

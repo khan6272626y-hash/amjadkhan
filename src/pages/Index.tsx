@@ -1,9 +1,9 @@
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
 import CategoryBanner from "@/components/CategoryBanner";
-import { products } from "@/data/products";
+import { useProducts } from "@/hooks/useProducts";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const ScrollReveal = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => {
@@ -32,8 +32,10 @@ const ScrollReveal = ({ children, className = "" }: { children: React.ReactNode;
 };
 
 const Index = () => {
+  const { data: products = [], isLoading } = useProducts();
+
   const featured = products.filter((p) => p.tag);
-  const newArrivals = products.filter((p) => p.tag === "new");
+  const newArrivals = products.filter((p) => p.is_new);
 
   return (
     <div>
@@ -70,11 +72,17 @@ const Index = () => {
             </Link>
           </div>
         </ScrollReveal>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-          {featured.slice(0, 8).map((p, i) => (
-            <ProductCard key={p.id} product={p} index={i} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center py-20">
+            <Loader2 className="animate-spin text-muted-foreground" size={32} />
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            {featured.slice(0, 8).map((p, i) => (
+              <ProductCard key={p.id} product={p} index={i} />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Stats banner */}
@@ -111,11 +119,17 @@ const Index = () => {
             </Link>
           </div>
         </ScrollReveal>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-          {newArrivals.map((p, i) => (
-            <ProductCard key={p.id} product={p} index={i} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center py-20">
+            <Loader2 className="animate-spin text-muted-foreground" size={32} />
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            {newArrivals.map((p, i) => (
+              <ProductCard key={p.id} product={p} index={i} />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Newsletter */}
