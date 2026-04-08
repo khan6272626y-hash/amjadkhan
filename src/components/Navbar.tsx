@@ -7,6 +7,7 @@ import { useProducts } from "@/hooks/useProducts";
 import { useState, useRef, useEffect } from "react";
 
 const Navbar = () => {
+  const { totalItems } = useCart();
   const { data: products = [] } = useProducts();
   const { totalWishlist } = useWishlist();
   const { cartIconRef } = useFlyToCart();
