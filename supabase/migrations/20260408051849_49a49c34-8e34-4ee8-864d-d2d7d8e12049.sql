@@ -1,0 +1,1 @@
+DROP POLICY "Allow public insert for products" ON public.products;
