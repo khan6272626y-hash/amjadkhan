@@ -1,8 +1,9 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { ShoppingBag, Heart, Menu, X, Search, Sun, Moon } from "lucide-react";
+import { ShoppingBag, Heart, Menu, X, Search, Sun, Moon, User, LogOut } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useFlyToCart } from "@/context/FlyToCartContext";
+import { useAuth } from "@/context/AuthContext";
 import { useProducts } from "@/hooks/useProducts";
 import { useState, useRef, useEffect } from "react";
 
@@ -11,12 +12,15 @@ const Navbar = () => {
   const { data: products = [] } = useProducts();
   const { totalWishlist } = useWishlist();
   const { cartIconRef } = useFlyToCart();
+  const { user, signOut } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
   const searchRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,6 +39,9 @@ const Navbar = () => {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) {
         setSearchOpen(false);
         setQuery("");
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false);
       }
     };
     document.addEventListener("mousedown", handler);
@@ -71,10 +78,7 @@ const Navbar = () => {
 
   const isActive = (path: string) => location.pathname === path;
 
-  // On homepage before scroll: transparent bg with white text
-  // On homepage after scroll OR other pages: solid bg with proper contrast
   const isTransparent = isHome && !scrolled;
-
   const textColor = isTransparent ? "text-white" : "text-foreground";
   const subtleText = isTransparent ? "text-white/70" : "text-muted-foreground";
   const hoverBg = isTransparent ? "hover:bg-white/10" : "hover:bg-accent";
@@ -196,6 +200,56 @@ const Navbar = () => {
               </span>
             )}
           </Link>
+
+          {/* Auth button */}
+          <div ref={userMenuRef} className="relative">
+            {user ? (
+              <>
+                <button
+                  onClick={() => setUserMenuOpen(!userMenuOpen)}
+                  className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${textColor} ${hoverBg}`}
+                  aria-label="Account"
+                >
+                  <User size={18} />
+                </button>
+                {userMenuOpen && (
+                  <div className="absolute right-0 top-12 w-48 bg-background border border-border rounded-xl shadow-2xl overflow-hidden animate-fade-in text-foreground">
+                    <div className="px-4 py-3 border-b border-border">
+                      <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                    </div>
+                    <Link
+                      to="/profile"
+                      onClick={() => setUserMenuOpen(false)}
+                      className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-accent transition-colors"
+                    >
+                      <User size={14} />
+                      My Profile
+                    </Link>
+                    <button
+                      onClick={async () => {
+                        await signOut();
+                        setUserMenuOpen(false);
+                        navigate("/");
+                      }}
+                      className="flex items-center gap-2 w-full px-4 py-3 text-sm hover:bg-accent transition-colors text-destructive"
+                    >
+                      <LogOut size={14} />
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <Link
+                to="/auth"
+                className={`p-2 rounded-full transition-all duration-300 hover:scale-110 ${textColor} ${hoverBg}`}
+                aria-label="Sign In"
+              >
+                <User size={18} />
+              </Link>
+            )}
+          </div>
+
           <button
             className={`md:hidden p-2 rounded-full transition-all duration-300 ${textColor}`}
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -223,6 +277,35 @@ const Navbar = () => {
               {c.label}
             </Link>
           ))}
+          {!user && (
+            <Link
+              to="/auth"
+              onClick={() => setMobileOpen(false)}
+              className="block py-3 text-sm font-medium text-primary"
+            >
+              Sign In / Sign Up
+            </Link>
+          )}
+          {user && (
+            <>
+              <Link
+                to="/profile"
+                onClick={() => setMobileOpen(false)}
+                className="block py-3 text-sm font-medium text-muted-foreground hover:text-foreground border-b border-border/50"
+              >
+                My Profile
+              </Link>
+              <button
+                onClick={async () => {
+                  await signOut();
+                  setMobileOpen(false);
+                }}
+                className="block py-3 text-sm font-medium text-destructive"
+              >
+                Sign Out
+              </button>
+            </>
+          )}
         </div>
       </div>
     </nav>
