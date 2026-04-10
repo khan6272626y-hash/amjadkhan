@@ -111,7 +111,7 @@ const Hero = () => {
               </Button>
             </Link>
             <Link to="/category/best">
-              <Button size="lg" variant="outline" className="rounded-full px-10 py-6 text-sm font-semibold tracking-wide border-white/30 text-black bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all duration-300">
+              <Button size="lg" variant="outline" className="rounded-full px-10 py-6 text-sm font-semibold tracking-wide border-white/40 text-white bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300">
                 Best Sellers
               </Button>
             </Link>
