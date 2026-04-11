@@ -19,6 +19,9 @@ interface Order {
   id: string;
   total_price: number;
   status: string;
+  payment_method: string;
+  payment_status: string;
+  transaction_id: string | null;
   created_at: string;
   order_items: OrderItem[];
 }
@@ -96,9 +99,12 @@ const ProfilePage = () => {
   }
 
   const statusColor: Record<string, string> = {
-    pending: "bg-yellow-500/10 text-yellow-600",
-    completed: "bg-primary/10 text-primary",
+    processing: "bg-yellow-500/10 text-yellow-600",
+    shipped: "bg-blue-500/10 text-blue-600",
+    delivered: "bg-primary/10 text-primary",
     cancelled: "bg-destructive/10 text-destructive",
+    pending: "bg-yellow-500/10 text-yellow-600",
+    paid: "bg-green-500/10 text-green-600",
   };
 
   return (
@@ -168,12 +174,16 @@ const ProfilePage = () => {
                         {new Date(order.created_at).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}
                       </span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className={`text-xs font-medium px-3 py-1 rounded-full capitalize ${statusColor[order.status] || ""}`}>
-                        {order.status}
-                      </span>
-                      <span className="font-bold">${Number(order.total_price).toFixed(2)}</span>
-                    </div>
+                    <div className="flex items-center gap-3 flex-wrap">
+                       <span className={`text-xs font-medium px-3 py-1 rounded-full capitalize ${statusColor[order.status] || ""}`}>
+                         {order.status}
+                       </span>
+                       <span className={`text-xs font-medium px-3 py-1 rounded-full capitalize ${statusColor[order.payment_status] || ""}`}>
+                         {order.payment_status}
+                       </span>
+                       <span className="text-xs bg-accent px-2 py-1 rounded-full capitalize">{order.payment_method}</span>
+                       <span className="font-bold">Rs. {Number(order.total_price).toFixed(0)}</span>
+                     </div>
                   </div>
                   <div className="space-y-3">
                     {order.order_items.map((item, i) => (
