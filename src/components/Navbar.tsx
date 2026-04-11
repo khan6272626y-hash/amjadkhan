@@ -4,6 +4,7 @@ import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useFlyToCart } from "@/context/FlyToCartContext";
 import { useAuth } from "@/context/AuthContext";
+import { useIsAdmin } from "@/hooks/useAdmin";
 import { useProducts } from "@/hooks/useProducts";
 import { useState, useRef, useEffect } from "react";
 
@@ -13,6 +14,7 @@ const Navbar = () => {
   const { totalWishlist } = useWishlist();
   const { cartIconRef } = useFlyToCart();
   const { user, signOut } = useAuth();
+  const { data: isAdmin } = useIsAdmin();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
