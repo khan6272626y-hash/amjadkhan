@@ -4,6 +4,7 @@ import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import { useFlyToCart } from "@/context/FlyToCartContext";
 import { useAuth } from "@/context/AuthContext";
+import { useIsAdmin } from "@/hooks/useAdmin";
 import { useProducts } from "@/hooks/useProducts";
 import { useState, useRef, useEffect } from "react";
 
@@ -13,6 +14,7 @@ const Navbar = () => {
   const { totalWishlist } = useWishlist();
   const { cartIconRef } = useFlyToCart();
   const { user, signOut } = useAuth();
+  const { data: isAdmin } = useIsAdmin();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
@@ -225,6 +227,16 @@ const Navbar = () => {
                       <User size={14} />
                       My Profile
                     </Link>
+                    {isAdmin && (
+                      <Link
+                        to="/admin"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-accent transition-colors text-primary font-medium"
+                      >
+                        <User size={14} />
+                        Admin Panel
+                      </Link>
+                    )}
                     <button
                       onClick={async () => {
                         await signOut();
@@ -295,6 +307,15 @@ const Navbar = () => {
               >
                 My Profile
               </Link>
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  onClick={() => setMobileOpen(false)}
+                  className="block py-3 text-sm font-medium text-primary border-b border-border/50"
+                >
+                  Admin Panel
+                </Link>
+              )}
               <button
                 onClick={async () => {
                   await signOut();

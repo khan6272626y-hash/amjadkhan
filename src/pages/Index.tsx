@@ -151,13 +151,13 @@ const Index = () => {
               <p className="text-xs tracking-[0.3em] uppercase text-background/50 mb-4">Stay Updated</p>
               <h2 className="text-3xl md:text-4xl font-bold mb-4">Join the STRIDE Club</h2>
               <p className="text-background/50 max-w-md mx-auto mb-8">Get early access to new drops, exclusive deals, and style inspiration.</p>
-              <div className="flex max-w-md mx-auto gap-3">
+              <div className="flex flex-col sm:flex-row max-w-md mx-auto gap-3">
                 <input
                   type="email"
                   placeholder="Enter your email"
-                  className="flex-1 bg-background/10 border border-background/20 rounded-full px-6 py-3 text-sm text-background placeholder:text-background/40 outline-none focus:border-background/40 transition-colors"
+                  className="flex-1 min-w-0 bg-background/10 border border-background/20 rounded-full px-6 py-3 text-sm text-background placeholder:text-background/40 outline-none focus:border-background/40 transition-colors"
                 />
-                <button className="bg-background text-foreground px-8 py-3 rounded-full text-sm font-semibold hover:bg-background/90 transition-colors">
+                <button className="bg-background text-foreground px-8 py-3 rounded-full text-sm font-semibold hover:bg-background/90 transition-colors whitespace-nowrap shrink-0">
                   Subscribe
                 </button>
               </div>

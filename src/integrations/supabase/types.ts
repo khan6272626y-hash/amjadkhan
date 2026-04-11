@@ -134,40 +134,55 @@ export type Database = {
       orders: {
         Row: {
           created_at: string
+          email: string | null
           id: string
+          payment_method: string
+          payment_status: string
           phone: string | null
           shipping_address: string | null
           status: string
           total_price: number
+          transaction_id: string | null
           user_id: string
         }
         Insert: {
           created_at?: string
+          email?: string | null
           id?: string
+          payment_method?: string
+          payment_status?: string
           phone?: string | null
           shipping_address?: string | null
           status?: string
           total_price: number
+          transaction_id?: string | null
           user_id: string
         }
         Update: {
           created_at?: string
+          email?: string | null
           id?: string
+          payment_method?: string
+          payment_status?: string
           phone?: string | null
           shipping_address?: string | null
           status?: string
           total_price?: number
+          transaction_id?: string | null
           user_id?: string
         }
         Relationships: []
       }
       products: {
         Row: {
+          brand: string | null
           category: string
           colors: string[] | null
           created_at: string
           description: string | null
+          discount_price: number | null
           features: string[] | null
+          gallery_images: string[] | null
           id: number
           image_key: string
           is_best: boolean
@@ -178,14 +193,18 @@ export type Database = {
           reviews: number | null
           sizes: number[] | null
           stock: number
+          subcategory: string | null
           tag: string | null
         }
         Insert: {
+          brand?: string | null
           category: string
           colors?: string[] | null
           created_at?: string
           description?: string | null
+          discount_price?: number | null
           features?: string[] | null
+          gallery_images?: string[] | null
           id?: number
           image_key: string
           is_best?: boolean
@@ -196,14 +215,18 @@ export type Database = {
           reviews?: number | null
           sizes?: number[] | null
           stock?: number
+          subcategory?: string | null
           tag?: string | null
         }
         Update: {
+          brand?: string | null
           category?: string
           colors?: string[] | null
           created_at?: string
           description?: string | null
+          discount_price?: number | null
           features?: string[] | null
+          gallery_images?: string[] | null
           id?: number
           image_key?: string
           is_best?: boolean
@@ -214,6 +237,7 @@ export type Database = {
           reviews?: number | null
           sizes?: number[] | null
           stock?: number
+          subcategory?: string | null
           tag?: string | null
         }
         Relationships: []
@@ -225,6 +249,7 @@ export type Database = {
           created_at: string
           full_name: string | null
           id: string
+          is_blocked: boolean
           phone: string | null
           updated_at: string
           user_id: string
@@ -235,6 +260,7 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          is_blocked?: boolean
           phone?: string | null
           updated_at?: string
           user_id: string
@@ -245,8 +271,30 @@ export type Database = {
           created_at?: string
           full_name?: string | null
           id?: string
+          is_blocked?: boolean
           phone?: string | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
         Relationships: []
@@ -256,10 +304,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -386,6 +440,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
