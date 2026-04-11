@@ -16,6 +16,7 @@ import WishlistPage from "./pages/WishlistPage";
 import ProductPage from "./pages/ProductPage";
 import AuthPage from "./pages/AuthPage";
 import ProfilePage from "./pages/ProfilePage";
+import AdminPage from "./pages/AdminPage";
 import NotFound from "./pages/NotFound";
 import Footer from "@/components/Footer";
 import { AnimatePresence, motion } from "framer-motion";
@@ -49,6 +50,7 @@ const AnimatedRoutes = () => {
           <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
