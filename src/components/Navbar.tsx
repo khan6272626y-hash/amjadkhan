@@ -227,6 +227,16 @@ const Navbar = () => {
                       <User size={14} />
                       My Profile
                     </Link>
+                    {isAdmin && (
+                      <Link
+                        to="/admin"
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2 px-4 py-3 text-sm hover:bg-accent transition-colors text-primary font-medium"
+                      >
+                        <User size={14} />
+                        Admin Panel
+                      </Link>
+                    )}
                     <button
                       onClick={async () => {
                         await signOut();
