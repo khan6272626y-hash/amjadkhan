@@ -307,6 +307,15 @@ const Navbar = () => {
               >
                 My Profile
               </Link>
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  onClick={() => setMobileOpen(false)}
+                  className="block py-3 text-sm font-medium text-primary border-b border-border/50"
+                >
+                  Admin Panel
+                </Link>
+              )}
               <button
                 onClick={async () => {
                   await signOut();
