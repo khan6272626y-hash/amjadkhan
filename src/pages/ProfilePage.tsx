@@ -65,7 +65,7 @@ const ProfilePage = () => {
     if (!user) return;
     const { data } = await supabase
       .from("orders")
-      .select("id, total_price, status, created_at, order_items(quantity, price, products(name, image_key))")
+      .select("id, total_price, status, payment_method, payment_status, transaction_id, created_at, order_items(quantity, price, products(name, image_key))")
       .eq("user_id", user.id)
       .order("created_at", { ascending: false });
     if (data) setOrders(data as unknown as Order[]);
